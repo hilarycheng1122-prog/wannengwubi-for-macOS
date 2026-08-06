@@ -1,0 +1,12 @@
+patch:
+  "engine/processors/@before 0": predictor
+  "engine/translators/@before 0": predict_translator
+  "switches/+":
+    - name: prediction
+      states: [关闭联想, 开启联想]
+      reset: 0
+  predictor:
+    db: predict.db
+    max_candidates: 5
+    max_iterations: 1
+

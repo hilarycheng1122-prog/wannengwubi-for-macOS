@@ -1,0 +1,88 @@
+# Rime schema settings
+# encoding: utf-8
+
+schema:
+  schema_id: wubi_pinyin_local
+  name: "万能五笔·拼音"
+  version: "0.2"
+  author:
+    - 發明人 王永民先生
+  description: |
+    五笔字型86版＋汉语拼音混合输入。
+    五笔候选优先，仅输出简体中文。
+    码表源自 ibus-table
+  dependencies:
+    - luna_pinyin
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: zh_simp
+    reset: 1
+    states: [ 简体, 简体 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator
+    - script_translator@pinyin
+  filters:
+    - simplifier@zh_simp
+    - uniquifier
+
+speller:
+  delimiter: " ;'"
+  #max_code_length: 4  # 四碼頂字上屏
+
+translator:
+  dictionary: wubi86
+  prism: wubi_pinyin_local
+  initial_quality: 100
+  enable_charset_filter: true
+  enable_sentence: true
+  enable_encoder: true
+  encode_commit_history: true
+  max_phrase_length: 4
+  disable_user_dict_for_patterns:
+    - "^z.*$"
+
+pinyin:
+  dictionary: luna_pinyin
+  prism: luna_pinyin
+  initial_quality: 0
+  enable_sentence: true
+  enable_user_dict: true
+
+zh_simp:
+  option_name: zh_simp
+  opencc_config: t2s.json
+  tips: none
+
+punctuator:
+  import_preset: default
+
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default
