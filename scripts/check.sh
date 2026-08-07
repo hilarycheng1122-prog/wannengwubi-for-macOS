@@ -19,6 +19,10 @@ rg -q 'opencc_config: s2t.json' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.sch
 rg -Fq 'accept: "Control+Shift+T", toggle: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'style/candidate_list_layout: linear' "$PROJECT_ROOT/config/rime/squirrel.custom.yaml"
 rg -q 'style/text_orientation: horizontal' "$PROJECT_ROOT/config/rime/squirrel.custom.yaml"
+rg -q 'max_candidates: 2' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
+rg -Fq 'accept: "Control+Shift+P", toggle: prediction' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
+rg -q 'opencc_config: t2s.json' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
+rg -q 'tags: \[ prediction \]' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
 
 if find "$PROJECT_ROOT" -path "$PROJECT_ROOT/.git" -prune -o \( -name '*.userdb' -o -name '*.bin' -o -name 'installation.yaml' \) -print | grep -q .; then
   echo '发现不应提交的个人数据或编译产物。' >&2

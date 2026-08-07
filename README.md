@@ -20,6 +20,8 @@
 ```bash
 make check             # 检查配置和仓库卫生
 make install-config    # 备份并安装稳定配置到 ~/Library/Rime
+make prediction-alpha  # 下载并校验官方 Alpha 预测数据库
+make install-prediction # 安装并启用可切换的离线联想配置
 make package           # 从锁定的鼠须管安装包构建本地 pkg
 make prediction        # 从二元词频数据构建 predict.db
 ```

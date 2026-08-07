@@ -1,12 +1,20 @@
 patch:
   "engine/processors/@before 0": predictor
   "engine/translators/@before 0": predict_translator
+  "engine/filters/@before 0": simplifier@prediction_simp
   "switches/+":
     - name: prediction
       states: [关闭联想, 开启联想]
       reset: 0
+  "key_binder/bindings/+":
+    - { when: always, accept: "Control+Shift+P", toggle: prediction }
   predictor:
     db: predict.db
-    max_candidates: 5
+    # 上游在追加候选后判断上限；设为 2 时实际最多显示 3 项。
+    max_candidates: 2
     max_iterations: 1
-
+  prediction_simp:
+    option_name: prediction
+    opencc_config: t2s.json
+    tags: [ prediction ]
+    tips: none
