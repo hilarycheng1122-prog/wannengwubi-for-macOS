@@ -4,6 +4,8 @@
 
 ## 当前状态
 
+当前开发版本：`0.2.0-dev`。稳定版本：`v0.1.0`。
+
 - `config/rime/`：当前已经实际使用的输入方案与界面配置。
 - `dictionaries/`：五笔 86 基础词库。词库属于数据，不与程序代码混在一起管理。
 - `assets/`：红底黑色“万”品牌图标源。
@@ -25,10 +27,10 @@ make prediction        # 从二元词频数据构建 predict.db
 ## 版本策略
 
 - 项目使用语义化版本：`主版本.功能版本.修订版本`。
-- `main` 始终保持可用；新功能使用 `feat/...` 分支。
+- `main` 始终保持稳定可用；每个新版本使用 `develop/vX.Y.Z` 分支，具体功能可再使用 `feat/...` 分支。
 - 每个可安装版本打标签，例如 `v0.2.0`，并在 `CHANGELOG.md` 记录变化。
+- 不复制整套源码作为版本备份；旧版本由 Git 标签、GitHub Release 和只读 worktree 保存。
 - 上游鼠须管、Rime 和插件版本固定在 `upstream/versions.lock`，升级时单独提交。
 - 大型 `pkg` 和预测数据库放 Release 或本地缓存，不直接放 Git 历史。
 
-详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) 和 [docs/RELEASE.md](docs/RELEASE.md)。
-
+详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)、[docs/VERSIONING.md](docs/VERSIONING.md) 和 [docs/RELEASE.md](docs/RELEASE.md)。
