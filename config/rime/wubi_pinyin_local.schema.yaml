@@ -21,7 +21,7 @@ switches:
   - name: full_shape
     states: [ 半角, 全角 ]
   - name: zh_trad
-    reset: 1
+    reset: 0
     states: [ 简体, 繁體 ]
   - name: ascii_punct
     states: [ 。，, ．， ]

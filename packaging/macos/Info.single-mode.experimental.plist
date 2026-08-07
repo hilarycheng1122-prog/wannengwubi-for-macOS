@@ -29,7 +29,7 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.1.2.3</string>
+	<string>1.1.2.4</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
@@ -75,14 +75,14 @@
 	<key>TISIntendedLanguage</key>
 	<string>zh-Hans</string>
 	<key>tsInputMethodAlternateIconFileKey</key>
-	<string>WanNengWubiMenu-v4.pdf</string>
+	<string>WanNengWubiMenu-v5.pdf</string>
 	<key>tsInputMethodCharacterRepertoireKey</key>
 	<array>
 		<string>Hans</string>
 	</array>
 	<key>tsInputMethodIconFileKey</key>
-	<string>WanNengWubiMenu-v4.pdf</string>
+	<string>WanNengWubiMenu-v5.pdf</string>
 	<key>tsInputMethodPaletteIconFileKey</key>
-	<string>WanNengWubiMenu-v4.pdf</string>
+	<string>WanNengWubiMenu-v5.pdf</string>
 </dict>
 </plist>

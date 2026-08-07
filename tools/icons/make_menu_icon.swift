@@ -18,8 +18,8 @@ final class MenuIconView: NSView {
     let paragraph = NSMutableParagraphStyle()
     paragraph.alignment = .center
     let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont(name: "PingFangSC-Semibold", size: 12.5)
-        ?? NSFont.systemFont(ofSize: 12.5, weight: .bold),
+      .font: NSFont(name: "PingFangSC-Semibold", size: 11.5)
+        ?? NSFont.systemFont(ofSize: 11.5, weight: .bold),
       .foregroundColor: NSColor.black,
       .paragraphStyle: paragraph,
     ]
