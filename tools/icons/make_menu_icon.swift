@@ -5,15 +5,21 @@ final class MenuIconView: NSView {
   override func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
 
-    // macOS treats input-source menu icons as monochrome template masks. A
-    // solid background plus a differently coloured glyph therefore collapses
-    // into one solid block. Keep the page transparent and draw only the glyph.
+    // macOS treats input-source menu icons as monochrome template masks. Keep
+    // the page transparent; use a stroked frame so it cannot collapse into a
+    // solid block after the system applies its menu-bar tint.
+    let frameRect = NSRect(x: 1, y: 0.75, width: 20, height: 14.5)
+    let frame = NSBezierPath(roundedRect: frameRect, xRadius: 3, yRadius: 3)
+    frame.lineWidth = 1.25
+    NSColor.black.setStroke()
+    frame.stroke()
+
     let text = "万" as NSString
     let paragraph = NSMutableParagraphStyle()
     paragraph.alignment = .center
     let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont(name: "PingFangSC-Semibold", size: 14)
-        ?? NSFont.systemFont(ofSize: 14, weight: .bold),
+      .font: NSFont(name: "PingFangSC-Semibold", size: 12.5)
+        ?? NSFont.systemFont(ofSize: 12.5, weight: .bold),
       .foregroundColor: NSColor.black,
       .paragraphStyle: paragraph,
     ]
