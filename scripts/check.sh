@@ -13,9 +13,10 @@ rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_loca
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'reset: 1' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'states: \[ 简体, 繁體 \]' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'opencc_config: s2t.json' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
-rg -q 'toggle: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -Fq 'accept: "Control+Shift+T", toggle: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'style/candidate_list_layout: linear' "$PROJECT_ROOT/config/rime/squirrel.custom.yaml"
 rg -q 'style/text_orientation: horizontal' "$PROJECT_ROOT/config/rime/squirrel.custom.yaml"
 
