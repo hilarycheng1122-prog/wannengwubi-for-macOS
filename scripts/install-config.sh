@@ -54,8 +54,9 @@ fi
 
 deployer='/Library/Input Methods/Squirrel.app/Contents/MacOS/rime_deployer'
 if [[ -x "$deployer" ]]; then
-  "$deployer" --build || echo '自动部署未完成，请从输入法菜单选择“重新部署”。'
+  shared_dir='/Library/Input Methods/Squirrel.app/Contents/SharedSupport'
+  "$deployer" --build "$RIME_DIR" "$shared_dir" "$RIME_DIR/build" || \
+    echo '自动部署未完成，请从输入法菜单选择“重新部署”。'
 fi
 
 echo "配置已安装；原文件备份在：$backup_dir"
-

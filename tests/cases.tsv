@@ -1,5 +1,7 @@
-# input	expected_first	purpose
-abce	节	五笔候选优先
-jie	节	拼音可以补充
-wannengwubi	万能五笔	连续拼音词组
-
+# mode	input	expected_first	purpose
+简体	abce	节	五笔候选优先
+简体	jie	节	拼音可以补充
+简体	wannengwubi	万能五笔	连续拼音词组
+繁体	abce	節	五笔候选转换为繁体
+繁体	jie	節	拼音候选转换为繁体
+繁体	wannengwubi	萬能五筆	连续拼音词组转换为繁体

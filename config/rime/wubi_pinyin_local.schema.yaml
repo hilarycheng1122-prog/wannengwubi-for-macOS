@@ -4,12 +4,12 @@
 schema:
   schema_id: wubi_pinyin_local
   name: "万能五笔·拼音"
-  version: "0.2"
+  version: "0.3"
   author:
     - 發明人 王永民先生
   description: |
     五笔字型86版＋汉语拼音混合输入。
-    五笔候选优先，仅输出简体中文。
+    五笔候选优先，默认简体，可切换为繁体输出。
     码表源自 ibus-table
   dependencies:
     - luna_pinyin
@@ -20,9 +20,9 @@ switches:
     states: [ 中文, 西文 ]
   - name: full_shape
     states: [ 半角, 全角 ]
-  - name: zh_simp
-    reset: 1
-    states: [ 简体, 简体 ]
+  - name: zh_trad
+    reset: 0
+    states: [ 简体, 繁體 ]
   - name: ascii_punct
     states: [ 。，, ．， ]
 
@@ -47,7 +47,7 @@ engine:
     - table_translator
     - script_translator@pinyin
   filters:
-    - simplifier@zh_simp
+    - simplifier@zh_trad
     - uniquifier
 
 speller:
@@ -73,9 +73,9 @@ pinyin:
   enable_sentence: true
   enable_user_dict: true
 
-zh_simp:
-  option_name: zh_simp
-  opencc_config: t2s.json
+zh_trad:
+  option_name: zh_trad
+  opencc_config: s2t.json
   tips: none
 
 punctuator:
@@ -83,6 +83,8 @@ punctuator:
 
 key_binder:
   import_preset: default
+  bindings:
+    - { when: always, accept: "Control+Shift+t", toggle: zh_trad }
 
 recognizer:
   import_preset: default
