@@ -37,7 +37,7 @@ swiftc -module-cache-path "$module_cache" "$PROJECT_ROOT/tools/icons/make_iconse
 swiftc -module-cache-path "$module_cache" "$PROJECT_ROOT/tools/icons/make_icns.swift" -o "$TEMP_DIR/make_icns"
 "$TEMP_DIR/make_iconset" "$PROJECT_ROOT/assets/app-icon-source.png" "$TEMP_DIR/WanNengWubi.iconset"
 "$TEMP_DIR/make_icns" "$TEMP_DIR/WanNengWubi.iconset" "$payload_app/Contents/Resources/Rime.icns"
-cp "$PROJECT_ROOT/assets/menu-icon.pdf" "$payload_app/Contents/Resources/WanNengWubiMenu-v2.pdf"
+cp "$PROJECT_ROOT/assets/menu-icon.pdf" "$payload_app/Contents/Resources/WanNengWubiMenu-v3.pdf"
 
 for strings in "$payload_app"/Contents/Resources/{en,zh-Hans,zh-Hant}.lproj/InfoPlist.strings; do
   /usr/libexec/PlistBuddy -c 'Set :CFBundleDisplayName 万能五笔' "$strings"
