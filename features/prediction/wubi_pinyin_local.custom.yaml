@@ -5,13 +5,14 @@ patch:
   "switches/+":
     - name: prediction
       states: [关闭联想, 开启联想]
-      reset: 0
+      # Alpha 阶段默认开启，避免快捷键被当前应用或 macOS 截获而无法验证。
+      reset: 1
   "key_binder/bindings/+":
     - { when: always, accept: "Control+Shift+P", toggle: prediction }
   predictor:
     db: predict.db
-    # 上游在追加候选后判断上限；设为 2 时实际最多显示 3 项。
-    max_candidates: 2
+    # 上游在追加候选后判断上限；设为 6 时实际最多显示 7 项，正好一页。
+    max_candidates: 6
     max_iterations: 1
   prediction_simp:
     option_name: prediction
