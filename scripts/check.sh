@@ -10,9 +10,12 @@ done < <(find "$PROJECT_ROOT/config" "$PROJECT_ROOT/features" -type f -name '*.y
 plutil -lint "$PROJECT_ROOT/packaging/macos/Info.single-mode.experimental.plist" >/dev/null
 
 rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'version: "0.2.1"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -Uq 'name: zh_simp\n    reset: 1' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'opencc_config: t2s.json' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -Uq 'name: zh_trad\n    reset: 0' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'states: \[ 简体, 繁體 \]' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'opencc_config: s2t.json' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"

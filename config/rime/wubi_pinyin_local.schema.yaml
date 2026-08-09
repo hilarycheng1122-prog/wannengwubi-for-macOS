@@ -4,7 +4,7 @@
 schema:
   schema_id: wubi_pinyin_local
   name: "万能五笔·拼音"
-  version: "0.3"
+  version: "0.2.1"
   author:
     - 發明人 王永民先生
   description: |
@@ -20,6 +20,9 @@ switches:
     states: [ 中文, 西文 ]
   - name: full_shape
     states: [ 半角, 全角 ]
+  - name: zh_simp
+    reset: 1
+    states: [ 简体规范, 简体规范 ]
   - name: zh_trad
     reset: 0
     states: [ 简体, 繁體 ]
@@ -47,6 +50,7 @@ engine:
     - table_translator
     - script_translator@pinyin
   filters:
+    - simplifier@zh_simp
     - simplifier@zh_trad
     - uniquifier
 
@@ -72,6 +76,11 @@ pinyin:
   initial_quality: 0
   enable_sentence: true
   enable_user_dict: true
+
+zh_simp:
+  option_name: zh_simp
+  opencc_config: t2s.json
+  tips: none
 
 zh_trad:
   option_name: zh_trad
