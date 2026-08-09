@@ -5,8 +5,8 @@
 ```text
 ~/Documents/Codex/
 ├── WanNengWubi/                 # 当前开发目录，现为 0.3.0-dev
-├── WanNengWubi-v0.2.0/         # v0.2.0 只读参考目录（Git worktree）
-└── WanNengWubi-v0.1.0/         # v0.1.0 只读参考目录（Git worktree）
+├── WanNengWubi-v0.2.1/         # v0.2.1 只读参考目录（Git worktree）
+└── WanNengWubi-v0.1.1/         # v0.1.1 只读参考目录（Git worktree）
 ```
 
 两个目录共享同一个 Git 历史，不是两份互不相关的项目。不要在稳定版参考目录中开发。
@@ -33,7 +33,7 @@ WanNengWubi/
 
 - `main`：最新稳定版本。
 - `develop/v0.3.0`：当前新版本开发线。
-- `v0.1.0`、`v0.2.0`：不可移动的历史版本标签。
+- `v0.1.1`、`v0.2.1`：不可移动的历史版本标签。
 - GitHub Releases：供人阅读的版本介绍和安装包入口。
 
 ## 发布新版本时
