@@ -10,6 +10,7 @@ done < <(find "$PROJECT_ROOT/config" "$PROJECT_ROOT/features" -type f -name '*.y
 plutil -lint "$PROJECT_ROOT/packaging/macos/Info.single-mode.experimental.plist" >/dev/null
 
 rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'version: "0.4.0-alpha.1"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
@@ -24,6 +25,14 @@ rg -q 'reset: 1' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yam
 rg -Fq 'accept: "Control+Shift+P", toggle: prediction' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
 rg -q 'opencc_config: t2s.json' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
 rg -q 'tags: \[ prediction \]' "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml"
+rg -q 'lua_processor@\*personal_predict\*processor' "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml"
+rg -q 'lua_translator@\*personal_predict\*translator' "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml"
+rg -q 'min_count: 2' "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml"
+rg -q 'max_candidates: 7' "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml"
+rg -q 'opencc_config: t2s.json' "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml"
+rg -q 'input_simplification' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
+rg -q 'LevelDb' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
+rg -q 'commit_notifier' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
 
 if find "$PROJECT_ROOT" -path "$PROJECT_ROOT/.git" -prune -o \( -name '*.userdb' -o -name '*.bin' -o -name 'installation.yaml' \) -print | grep -q .; then
   echo '发现不应提交的个人数据或编译产物。' >&2

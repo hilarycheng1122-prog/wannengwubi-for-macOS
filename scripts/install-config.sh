@@ -4,15 +4,22 @@ set -euo pipefail
 PROJECT_ROOT="${0:A:h:h}"
 RIME_DIR="${RIME_USER_DIR:-$HOME/Library/Rime}"
 ENABLE_PREDICTION=false
+ENABLE_PERSONAL_LEARNING=false
 DRY_RUN=false
 
 for arg in "$@"; do
   case "$arg" in
     --prediction) ENABLE_PREDICTION=true ;;
+    --personal-learning) ENABLE_PERSONAL_LEARNING=true ;;
     --dry-run) DRY_RUN=true ;;
     *) echo "未知参数：$arg" >&2; exit 2 ;;
   esac
 done
+
+if $ENABLE_PREDICTION && $ENABLE_PERSONAL_LEARNING; then
+  echo '静态联想和个人学习安装模式不能同时启用。' >&2
+  exit 2
+fi
 
 files=(
   default.custom.yaml
@@ -25,6 +32,7 @@ if $DRY_RUN; then
   echo "将安装到：$RIME_DIR"
   printf '  %s\n' "${files[@]}" wubi86.dict.yaml
   $ENABLE_PREDICTION && printf '  %s\n' wubi_pinyin_local.custom.yaml predict.db
+  $ENABLE_PERSONAL_LEARNING && printf '  %s\n' wubi_pinyin_local.custom.yaml lua/personal_predict.lua
   exit 0
 fi
 
@@ -37,6 +45,13 @@ for name in "${files[@]}" wubi86.dict.yaml wubi_pinyin_local.custom.yaml predict
     cp -p "$RIME_DIR/$name" "$backup_dir/$name"
   fi
 done
+if [[ -f "$RIME_DIR/lua/personal_predict.lua" ]]; then
+  mkdir -p "$backup_dir/lua"
+  cp -p "$RIME_DIR/lua/personal_predict.lua" "$backup_dir/lua/"
+fi
+if [[ -d "$RIME_DIR/personal_predict.userdb" ]]; then
+  cp -pR "$RIME_DIR/personal_predict.userdb" "$backup_dir/"
+fi
 
 for name in "${files[@]}"; do
   cp "$PROJECT_ROOT/config/rime/$name" "$RIME_DIR/$name"
@@ -50,6 +65,15 @@ if $ENABLE_PREDICTION; then
   [[ -f "$model" ]] || { echo '请先执行 make prediction 生成 predict.db。' >&2; exit 4; }
   cp "$PROJECT_ROOT/features/prediction/wubi_pinyin_local.custom.yaml" "$RIME_DIR/"
   cp "$model" "$RIME_DIR/predict.db"
+fi
+
+if $ENABLE_PERSONAL_LEARNING; then
+  plugin='/Library/Input Methods/Squirrel.app/Contents/Frameworks/rime-plugins/librime-lua.dylib'
+  [[ -f "$plugin" ]] || { echo '当前鼠须管不含 librime-lua。' >&2; exit 5; }
+  mkdir -p "$RIME_DIR/lua"
+  cp "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml" \
+    "$RIME_DIR/wubi_pinyin_local.custom.yaml"
+  cp "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua" "$RIME_DIR/lua/"
 fi
 
 deployer='/Library/Input Methods/Squirrel.app/Contents/MacOS/rime_deployer'

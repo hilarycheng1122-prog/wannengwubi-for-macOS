@@ -6,6 +6,14 @@
 
 当前开发版本：`0.4.0-dev`（个人学习联想）。静态联想基线：`v0.3.0-alpha.1`。最新稳定版本：`v0.2.0`。默认输出简体，按 `Control + Shift + T` 可切换简体/繁体。
 
+个人学习 Alpha 安装：
+
+```bash
+make install-personal-learning
+```
+
+个人数据保存在 `~/Library/Rime/personal_predict.userdb`，不会进入 Git。需要清空时执行 `make reset-personal-learning`，原数据会先移动到可恢复备份目录。
+
 - `config/rime/`：当前已经实际使用的输入方案与界面配置。
 - `dictionaries/`：五笔 86 基础词库。词库属于数据，不与程序代码混在一起管理。
 - `assets/`：红底黑色“万”品牌图标源。
