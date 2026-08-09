@@ -108,4 +108,11 @@ if [[ -x "$deployer" ]]; then
     echo '自动部署未完成，请从输入法菜单选择“重新部署”。'
 fi
 
+# rime_deployer 只负责编译文件；通知正在运行的鼠须管重新载入新方案。
+# 使用临时 RIME_USER_DIR 做隔离测试时不发送通知，避免影响当前输入会话。
+squirrel='/Library/Input Methods/Squirrel.app/Contents/MacOS/Squirrel'
+if [[ -z "${RIME_USER_DIR:-}" && -x "$squirrel" ]]; then
+  "$squirrel" --reload || echo '自动重新载入未完成，请切换一次输入法。'
+fi
+
 echo "配置已安装；原文件备份在：$backup_dir"

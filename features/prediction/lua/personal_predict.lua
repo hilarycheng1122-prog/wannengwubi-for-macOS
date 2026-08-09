@@ -229,7 +229,7 @@ function M.translator.func(_, segment, env)
     local text, count = row:match("^([^\t]+)\t(%d+)$")
     if text then
       local candidate = Candidate(
-        env.candidate_type, segment.start, segment._end, text, "〔个人 " .. count .. "次〕"
+        env.candidate_type, segment.start, segment._end, text, ""
       )
       candidate.quality = 1000 + tonumber(count)
       yield(candidate)
