@@ -4,7 +4,9 @@ patch:
   "engine/processors/@before 1": lua_processor@*personal_predict*processor
   "engine/translators/@before 0": predict_translator
   "engine/translators/@before 1": lua_translator@*personal_predict*translator
-  "engine/filters/@before 0": simplifier@prediction_simp
+  # 先把五笔、拼音和联想候选全部规范成简体；基础方案中的 zh_trad
+  # 位于其后，仅在用户主动切到繁体模式时再执行简转繁。
+  "engine/filters/@before 0": simplifier@input_simp
   "switches/+":
     - name: prediction
       states: [关闭通用联想, 开启通用联想]
@@ -24,8 +26,7 @@ patch:
     candidate_type: prediction
     min_count: 2
     max_candidates: 7
-  prediction_simp:
+  input_simp:
     option_name: input_simplification
     opencc_config: t2s.json
-    tags: [ prediction, personal_prediction ]
     tips: none

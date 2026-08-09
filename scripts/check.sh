@@ -10,7 +10,7 @@ done < <(find "$PROJECT_ROOT/config" "$PROJECT_ROOT/features" -type f -name '*.y
 plutil -lint "$PROJECT_ROOT/packaging/macos/Info.single-mode.experimental.plist" >/dev/null
 
 rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
-rg -q 'version: "0.5.0-alpha.2"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'version: "0.5.0-alpha.3"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
@@ -44,7 +44,13 @@ rg -q 'engine/translators/@before 1.*personal_predict' "$PROJECT_ROOT/features/p
 rg -q 'prediction_option: prediction' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
 rg -q 'candidate_type: prediction' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
 rg -q 'db: predict.db' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
-rg -q 'tags: \[ prediction, personal_prediction \]' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
+rg -q 'engine/filters/@before 0.*simplifier@input_simp' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
+rg -q 'option_name: input_simplification' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
+rg -q 'opencc_config: t2s.json' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"
+if rg -q 'tags:.*prediction' "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml"; then
+  echo '简体规范过滤必须覆盖普通候选和联想候选。' >&2
+  exit 1
+fi
 zsh -n "$PROJECT_ROOT/scripts/install-config.sh"
 RIME_USER_DIR=/tmp/wanneng-wubi-check "$PROJECT_ROOT/scripts/install-config.sh" \
   --universal-learning --dry-run | rg -q 'predict.db'

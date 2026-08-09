@@ -4,7 +4,7 @@
 
 ```text
 ~/Documents/Codex/
-├── WanNengWubi/                 # 当前开发目录，现为 0.5.0-alpha.2
+├── WanNengWubi/                 # 当前开发目录，现为 0.5.0-alpha.3
 ├── WanNengWubi-v0.2.1/         # v0.2.1 只读参考目录（Git worktree）
 └── WanNengWubi-v0.1.1/         # v0.1.1 只读参考目录（Git worktree）
 ```
