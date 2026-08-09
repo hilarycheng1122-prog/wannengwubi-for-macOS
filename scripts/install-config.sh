@@ -5,19 +5,25 @@ PROJECT_ROOT="${0:A:h:h}"
 RIME_DIR="${RIME_USER_DIR:-$HOME/Library/Rime}"
 ENABLE_PREDICTION=false
 ENABLE_PERSONAL_LEARNING=false
+ENABLE_UNIVERSAL_LEARNING=false
 DRY_RUN=false
 
 for arg in "$@"; do
   case "$arg" in
     --prediction) ENABLE_PREDICTION=true ;;
     --personal-learning) ENABLE_PERSONAL_LEARNING=true ;;
+    --universal-learning) ENABLE_UNIVERSAL_LEARNING=true ;;
     --dry-run) DRY_RUN=true ;;
     *) echo "未知参数：$arg" >&2; exit 2 ;;
   esac
 done
 
-if $ENABLE_PREDICTION && $ENABLE_PERSONAL_LEARNING; then
-  echo '静态联想和个人学习安装模式不能同时启用。' >&2
+mode_count=0
+$ENABLE_PREDICTION && (( mode_count += 1 ))
+$ENABLE_PERSONAL_LEARNING && (( mode_count += 1 ))
+$ENABLE_UNIVERSAL_LEARNING && (( mode_count += 1 ))
+if (( mode_count > 1 )); then
+  echo '静态联想、个人学习和通用学习安装模式只能选择一个。' >&2
   exit 2
 fi
 
@@ -33,6 +39,8 @@ if $DRY_RUN; then
   printf '  %s\n' "${files[@]}" wubi86.dict.yaml
   $ENABLE_PREDICTION && printf '  %s\n' wubi_pinyin_local.custom.yaml predict.db
   $ENABLE_PERSONAL_LEARNING && printf '  %s\n' wubi_pinyin_local.custom.yaml lua/personal_predict.lua
+  $ENABLE_UNIVERSAL_LEARNING && \
+    printf '  %s\n' wubi_pinyin_local.custom.yaml predict.db lua/personal_predict.lua
   exit 0
 fi
 
@@ -73,6 +81,23 @@ if $ENABLE_PERSONAL_LEARNING; then
   mkdir -p "$RIME_DIR/lua"
   cp "$PROJECT_ROOT/features/prediction/personal_learning.custom.yaml" \
     "$RIME_DIR/wubi_pinyin_local.custom.yaml"
+  cp "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua" "$RIME_DIR/lua/"
+fi
+
+if $ENABLE_UNIVERSAL_LEARNING; then
+  predict_plugin='/Library/Input Methods/Squirrel.app/Contents/Frameworks/rime-plugins/librime-predict.dylib'
+  lua_plugin='/Library/Input Methods/Squirrel.app/Contents/Frameworks/rime-plugins/librime-lua.dylib'
+  model="$PROJECT_ROOT/features/prediction/models/predict.db"
+  [[ -f "$predict_plugin" ]] || { echo '当前鼠须管不含 librime-predict。' >&2; exit 6; }
+  [[ -f "$lua_plugin" ]] || { echo '当前鼠须管不含 librime-lua。' >&2; exit 7; }
+  [[ -f "$model" ]] || {
+    echo '缺少通用预测库，请先执行 make prediction-alpha。' >&2
+    exit 8
+  }
+  mkdir -p "$RIME_DIR/lua"
+  cp "$PROJECT_ROOT/features/prediction/universal_learning.custom.yaml" \
+    "$RIME_DIR/wubi_pinyin_local.custom.yaml"
+  cp "$model" "$RIME_DIR/predict.db"
   cp "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua" "$RIME_DIR/lua/"
 fi
 

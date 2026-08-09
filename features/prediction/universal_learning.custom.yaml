@@ -1,0 +1,31 @@
+patch:
+  # 通用数据库负责冷启动，Lua 层记录个人搭配并把个人候选插入同一联想段。
+  "engine/processors/@before 0": predictor
+  "engine/processors/@before 1": lua_processor@*personal_predict*processor
+  "engine/translators/@before 0": predict_translator
+  "engine/translators/@before 1": lua_translator@*personal_predict*translator
+  "engine/filters/@before 0": simplifier@prediction_simp
+  "switches/+":
+    - name: prediction
+      states: [关闭通用联想, 开启通用联想]
+      reset: 1
+    - name: personal_learning
+      states: [暂停个人学习, 开启个人学习]
+      reset: 1
+  "key_binder/bindings/+":
+    - { when: always, accept: "Control+Shift+P", toggle: prediction }
+  predictor:
+    db: predict.db
+    max_candidates: 6
+    max_iterations: 1
+  personal_predictor:
+    db: personal_predict
+    prediction_option: prediction
+    candidate_type: prediction
+    min_count: 2
+    max_candidates: 7
+  prediction_simp:
+    option_name: input_simplification
+    opencc_config: t2s.json
+    tags: [ prediction, personal_prediction ]
+    tips: none

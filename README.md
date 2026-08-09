@@ -4,15 +4,16 @@
 
 ## 当前状态
 
-当前开发版本：`0.4.0-dev`（个人学习联想）。静态联想基线：`v0.3.0-alpha.2`。最新稳定版本：`v0.2.1`。默认输出简体，按 `Control + Shift + T` 可切换简体/繁体。
+当前开发版本：`0.5.0-alpha.1`（通用联想 + 个人学习）。上一版个人学习基线：`v0.4.0-alpha.1`。默认输出简体，按 `Control + Shift + T` 可切换简体/繁体。
 
-个人学习 Alpha 安装：
+通用学习 Alpha 安装：
 
 ```bash
-make install-personal-learning
+make prediction-alpha
+make install-universal-learning
 ```
 
-个人数据保存在 `~/Library/Rime/personal_predict.userdb`，不会进入 Git。需要清空时执行 `make reset-personal-learning`，原数据会先移动到可恢复备份目录。
+安装后，通用数据库立即提供下一词候选；个人数据继续保存在 `~/Library/Rime/personal_predict.userdb`，用于逐渐调整候选优先级，不会进入 Git。需要清空时执行 `make reset-personal-learning`，原数据会先移动到可恢复备份目录。
 
 - `config/rime/`：当前已经实际使用的输入方案与界面配置。
 - `dictionaries/`：五笔 86 基础词库。词库属于数据，不与程序代码混在一起管理。
@@ -30,6 +31,8 @@ make check             # 检查配置和仓库卫生
 make install-config    # 备份并安装稳定配置到 ~/Library/Rime
 make prediction-alpha  # 下载并校验官方 Alpha 预测数据库
 make install-prediction # 安装并启用可切换的离线联想配置
+make install-universal-learning # 安装通用联想与个人学习混合模式
+make reset-personal-learning # 备份并清空个人学习数据
 make package           # 从锁定的鼠须管安装包构建本地 pkg
 make prediction        # 从二元词频数据构建 predict.db
 ```

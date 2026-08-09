@@ -4,7 +4,7 @@
 
 ```text
 ~/Documents/Codex/
-├── WanNengWubi/                 # 当前开发目录，现为 0.3.0-dev
+├── WanNengWubi/                 # 当前开发目录，现为 0.5.0-alpha.1
 ├── WanNengWubi-v0.2.1/         # v0.2.1 只读参考目录（Git worktree）
 └── WanNengWubi-v0.1.1/         # v0.1.1 只读参考目录（Git worktree）
 ```
@@ -32,7 +32,7 @@ WanNengWubi/
 ## 版本角色
 
 - `main`：最新稳定版本。
-- `develop/v0.3.0`：当前新版本开发线。
+- `develop/v0.5.0`：当前新版本开发线。
 - `v0.1.1`、`v0.2.1`：不可移动的历史版本标签。
 - GitHub Releases：供人阅读的版本介绍和安装包入口。
 

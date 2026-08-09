@@ -1,4 +1,4 @@
-.PHONY: check install-config install-prediction install-personal-learning reset-personal-learning package prediction prediction-alpha
+.PHONY: check install-config install-prediction install-personal-learning install-universal-learning reset-personal-learning package prediction prediction-alpha
 
 check:
 	./scripts/check.sh
@@ -11,6 +11,9 @@ install-prediction:
 
 install-personal-learning:
 	./scripts/install-config.sh --personal-learning
+
+install-universal-learning:
+	./scripts/install-config.sh --universal-learning
 
 reset-personal-learning:
 	./scripts/reset-personal-learning.sh

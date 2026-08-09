@@ -1,4 +1,4 @@
--- 万能五笔 v0.4：完全离线的个人二元词汇联想。
+-- 万能五笔 v0.5：通用静态联想之上的本地个人二元学习层。
 
 local M = {}
 
@@ -126,11 +126,12 @@ local function on_commit(ctx, env)
 
   env.previous = current
   env.pending = current
-  env.stop_after_prediction = record.type == "personal_prediction"
+  env.stop_after_prediction =
+    record.type == "personal_prediction" or record.type == env.candidate_type
 end
 
 local function on_update(ctx, env)
-  if env.composing_prediction or ctx:is_composing() or not env.pending then
+  if env.composing_prediction or not env.pending then
     return
   end
 
@@ -140,12 +141,25 @@ local function on_update(ctx, env)
     env.stop_after_prediction = false
     return
   end
-  if not ctx:get_option("personal_prediction") then
+  if not ctx:get_option(env.prediction_option) then
     return
   end
 
   local candidates = query_candidates(env, previous)
-  if #candidates == 0 then
+
+  -- 通用 predictor 已经创建联想段时，把个人候选挂到同一个段上。
+  -- 这样个人候选以更高 quality 排在通用候选之前，后续 uniquifier 负责去重。
+  local existing = ctx.composition:back()
+  if existing and existing:has_tag("prediction") then
+    if #candidates > 0 then
+      ctx:set_property(candidate_property, encode_candidates(candidates))
+      existing.tags = Set({"prediction", "personal_prediction", "placeholder"})
+    end
+    return
+  end
+
+  -- 通用库没有当前前词时，个人数据库仍可独立产生联想。
+  if ctx:is_composing() or #candidates == 0 then
     return
   end
 
@@ -165,6 +179,10 @@ M.processor = {}
 function M.processor.init(env)
   local config = env.engine.schema.config
   local db_name = config:get_string("personal_predictor/db") or "personal_predict"
+  env.prediction_option =
+    config:get_string("personal_predictor/prediction_option") or "personal_prediction"
+  env.candidate_type =
+    config:get_string("personal_predictor/candidate_type") or "personal_prediction"
   env.min_count = config:get_int("personal_predictor/min_count") or 2
   env.max_candidates = config:get_int("personal_predictor/max_candidates") or 7
   env.db = get_db(db_name)
@@ -211,7 +229,7 @@ function M.translator.func(_, segment, env)
     local text, count = row:match("^([^\t]+)\t(%d+)$")
     if text then
       local candidate = Candidate(
-        "personal_prediction", segment.start, segment._end, text, "〔个人 " .. count .. "次〕"
+        env.candidate_type, segment.start, segment._end, text, "〔个人 " .. count .. "次〕"
       )
       candidate.quality = 1000 + tonumber(count)
       yield(candidate)

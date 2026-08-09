@@ -2,6 +2,8 @@
 
 当前安装的鼠须管已经包含 `librime-predict.dylib`，因此第一版不需要修改输入法核心代码。
 
+v0.5.0 在同一个联想段中合并通用数据库和本地个人学习。当前说明见 [UNIVERSAL_LEARNING.md](UNIVERSAL_LEARNING.md)。以下内容保留为纯静态联想基线及自建数据库参考。
+
 ## Alpha 1
 
 先使用上游 `data-1.0` 的预发布 `predict.db` 验证链路。该数据库由 essay + octagram 生成，只用于本机测试，不随项目发布。预测候选先通过 `t2s.json` 统一为简体；开启万能五笔的繁体模式后，再由现有 `s2t.json` 转为繁体。
