@@ -8,9 +8,20 @@ while IFS= read -r yaml_file; do
 done < <(find "$PROJECT_ROOT/config" "$PROJECT_ROOT/features" -type f -name '*.yaml' -print)
 
 plutil -lint "$PROJECT_ROOT/packaging/macos/Info.single-mode.experimental.plist" >/dev/null
+xmllint --noout "$PROJECT_ROOT/packaging/macos/Distribution.xml"
+zsh -n "$PROJECT_ROOT/scripts/build-package.sh"
+bash -n "$PROJECT_ROOT/packaging/macos/scripts/postinstall"
+[[ -x "$PROJECT_ROOT/scripts/build-package.sh" ]] || {
+  echo '打包脚本缺少执行权限。' >&2
+  exit 1
+}
+[[ -x "$PROJECT_ROOT/packaging/macos/scripts/postinstall" ]] || {
+  echo '安装后脚本缺少执行权限。' >&2
+  exit 1
+}
 
 rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
-rg -q 'version: "1.0.0"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'version: "1.0.1"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"

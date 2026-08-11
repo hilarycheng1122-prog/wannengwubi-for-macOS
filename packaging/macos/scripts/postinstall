@@ -1,0 +1,76 @@
+#!/bin/bash
+set -euo pipefail
+
+target_volume="${3:-/}"
+support="$target_volume/Library/Application Support/WanNengWubi/rime"
+squirrel_app="$target_volume/Library/Input Methods/Squirrel.app"
+
+login_user="${WANNENG_WUBI_TEST_USER:-$(/usr/bin/stat -f%Su /dev/console)}"
+if [[ -z "$login_user" || "$login_user" == root || "$login_user" == loginwindow ]]; then
+  echo '没有检测到已登录的 macOS 用户，无法安装个人输入法配置。' >&2
+  exit 1
+fi
+
+if [[ -n "${WANNENG_WUBI_HOME_OVERRIDE:-}" ]]; then
+  user_home="$WANNENG_WUBI_HOME_OVERRIDE"
+else
+  user_home="$(/usr/bin/dscl . -read "/Users/$login_user" NFSHomeDirectory | \
+    /usr/bin/awk '{$1=""; sub(/^ /, ""); print}')"
+fi
+[[ -n "$user_home" ]] || {
+  echo "无法确定用户 $login_user 的个人目录。" >&2
+  exit 1
+}
+
+rime_dir="$user_home/Library/Rime"
+timestamp="$(/bin/date +%Y%m%d-%H%M%S)"
+backup_dir="$rime_dir/backups/wanneng-wubi-installer-$timestamp"
+/bin/mkdir -p "$rime_dir" "$rime_dir/lua" "$backup_dir"
+
+files=(
+  default.custom.yaml
+  squirrel.custom.yaml
+  wubi86.schema.yaml
+  wubi_pinyin_local.schema.yaml
+  wubi86.dict.yaml
+  wubi_pinyin_local.custom.yaml
+  predict.db
+)
+
+for name in "${files[@]}"; do
+  if [[ -e "$rime_dir/$name" ]]; then
+    /bin/cp -p "$rime_dir/$name" "$backup_dir/$name"
+  fi
+  /usr/bin/install -m 0644 "$support/$name" "$rime_dir/$name"
+done
+
+if [[ -f "$rime_dir/lua/personal_predict.lua" ]]; then
+  /bin/mkdir -p "$backup_dir/lua"
+  /bin/cp -p "$rime_dir/lua/personal_predict.lua" "$backup_dir/lua/"
+fi
+/usr/bin/install -m 0644 "$support/lua/personal_predict.lua" \
+  "$rime_dir/lua/personal_predict.lua"
+
+# 个人学习数据库只备份、不覆盖；新用户会在首次输入时自动创建。
+if [[ -d "$rime_dir/personal_predict.userdb" ]]; then
+  /bin/cp -pR "$rime_dir/personal_predict.userdb" "$backup_dir/"
+fi
+
+/usr/sbin/chown -R "$login_user":staff "$rime_dir"
+
+if [[ "${WANNENG_WUBI_SKIP_ACTIVATE:-0}" != 1 ]]; then
+  squirrel="$squirrel_app/Contents/MacOS/Squirrel"
+  deployer="$squirrel_app/Contents/MacOS/rime_deployer"
+  shared="$squirrel_app/Contents/SharedSupport"
+
+  /usr/bin/sudo -u "$login_user" /usr/bin/killall Squirrel >/dev/null 2>&1 || true
+  "$squirrel" --register-input-source
+  /usr/bin/sudo -u "$login_user" /usr/bin/env HOME="$user_home" \
+    "$deployer" --build "$rime_dir" "$shared" "$rime_dir/build"
+  /usr/bin/sudo -u "$login_user" /usr/bin/env HOME="$user_home" \
+    "$squirrel" --enable-input-source
+  /usr/bin/sudo -u "$login_user" /usr/bin/env HOME="$user_home" \
+    "$squirrel" --select-input-source
+fi
+
+echo "万能五笔已安装；旧配置备份在：$backup_dir"
