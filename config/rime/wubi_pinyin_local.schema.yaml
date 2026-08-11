@@ -4,12 +4,12 @@
 schema:
   schema_id: wubi_pinyin_local
   name: "万能五笔·拼音"
-  version: "0.2.1"
+  version: "1.0.0"
   author:
     - 發明人 王永民先生
   description: |
     五笔字型86版＋汉语拼音混合输入。
-    五笔候选优先，默认简体，可切换为繁体输出。
+    五笔候选优先，默认简体；支持通用下一词联想和本地个人学习。
     码表源自 ibus-table
   dependencies:
     - luna_pinyin

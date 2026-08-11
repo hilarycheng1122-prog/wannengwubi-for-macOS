@@ -1,0 +1,19 @@
+patch:
+  "engine/processors/@before 0": lua_processor@*personal_predict*processor
+  "engine/translators/@before 0": lua_translator@*personal_predict*translator
+  "engine/filters/@before 0": simplifier@input_simp
+  "switches/+":
+    - name: personal_prediction
+      states: [关闭个人联想, 开启个人联想]
+      reset: 1
+    - name: personal_learning
+      states: [暂停个人学习, 开启个人学习]
+      reset: 1
+  personal_predictor:
+    db: personal_predict
+    min_count: 2
+    max_candidates: 7
+  input_simp:
+    option_name: input_simplification
+    opencc_config: t2s.json
+    tips: none

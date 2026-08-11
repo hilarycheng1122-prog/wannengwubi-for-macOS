@@ -1,0 +1,33 @@
+patch:
+  # 通用数据库负责冷启动，Lua 层记录个人搭配并把个人候选插入同一联想段。
+  "engine/processors/@before 0": predictor
+  "engine/processors/@before 1": lua_processor@*personal_predict*processor
+  "engine/translators/@before 0": predict_translator
+  "engine/translators/@before 1": lua_translator@*personal_predict*translator
+  # 先把五笔、拼音和联想候选全部规范成简体；基础方案中的 zh_trad
+  # 位于其后，仅在用户主动切到繁体模式时再执行简转繁。
+  "engine/filters/@before 0": simplifier@input_simp
+  "switches/+":
+    - name: prediction_enabled
+      states: [关闭通用联想, 开启通用联想]
+      reset: 1
+    - name: personal_learning
+      states: [暂停个人学习, 开启个人学习]
+      reset: 1
+  "key_binder/bindings/+":
+    - { when: always, accept: "Control+Shift+P", toggle: prediction_enabled }
+  predictor:
+    db: predict.db
+    max_candidates: 6
+    max_iterations: 1
+  personal_predictor:
+    db: personal_predict
+    prediction_option: prediction_enabled
+    engine_prediction_option: prediction
+    candidate_type: prediction
+    min_count: 2
+    max_candidates: 7
+  input_simp:
+    option_name: input_simplification
+    opencc_config: t2s.json
+    tips: none
