@@ -1,5 +1,6 @@
 .DS_Store
 .build/
+archives/
 dist/
 vendor/cache/
 *.pkg
@@ -15,4 +16,3 @@ features/prediction/corpus/private/*
 !features/prediction/corpus/private/.gitkeep
 features/prediction/models/*
 !features/prediction/models/.gitkeep
-
