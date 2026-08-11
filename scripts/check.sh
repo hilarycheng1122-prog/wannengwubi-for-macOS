@@ -10,7 +10,7 @@ done < <(find "$PROJECT_ROOT/config" "$PROJECT_ROOT/features" -type f -name '*.y
 plutil -lint "$PROJECT_ROOT/packaging/macos/Info.single-mode.experimental.plist" >/dev/null
 
 rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
-rg -q 'version: "0.5.0-alpha.3"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'version: "0.5.0-alpha.4"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
@@ -33,6 +33,8 @@ rg -q 'opencc_config: t2s.json' "$PROJECT_ROOT/features/prediction/personal_lear
 rg -q 'input_simplification' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
 rg -q 'LevelDb' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
 rg -q 'commit_notifier' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
+rg -Fq '["Super+v"] = true' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
+rg -q 'restore_prediction_after_paste' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"
 if rg -q '个人 .*次' "$PROJECT_ROOT/features/prediction/lua/personal_predict.lua"; then
   echo '个人联想候选不应显示学习次数标记。' >&2
   exit 1

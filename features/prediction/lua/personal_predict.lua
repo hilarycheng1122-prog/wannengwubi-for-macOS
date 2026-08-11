@@ -34,6 +34,15 @@ local ignored_types = {
   thru = true,
 }
 
+local paste_keys = {
+  ["Super+v"] = true,
+  ["Super+V"] = true,
+  ["Command+v"] = true,
+  ["Command+V"] = true,
+  ["Meta+v"] = true,
+  ["Meta+V"] = true,
+}
+
 local function pair_key(previous, current)
   return "p\t" .. previous .. "\t" .. current
 end
@@ -208,8 +217,33 @@ end
 function M.processor.func(key, env)
   local context = env.engine.context
   local segment = context.composition:back()
+  local repr = key:repr()
+
+  if paste_keys[repr] then
+    -- 粘贴不是输入法上屏：关闭本次预测、清掉残留联想，并切断学习上下文。
+    -- prediction 在下一次普通按键到来时恢复，确保 native predictor 不会响应粘贴更新。
+    env.restore_prediction_after_paste = context:get_option(env.prediction_option)
+    if env.restore_prediction_after_paste then
+      context:set_option(env.prediction_option, false)
+    end
+    env.previous = nil
+    env.pending = nil
+    env.stop_after_prediction = false
+    if segment and
+      (segment:has_tag("prediction") or segment:has_tag("personal_prediction")) then
+      context:clear()
+    end
+    return 2
+  end
+
+  if env.restore_prediction_after_paste ~= nil then
+    if env.restore_prediction_after_paste then
+      context:set_option(env.prediction_option, true)
+    end
+    env.restore_prediction_after_paste = nil
+  end
+
   if segment and segment:has_tag("personal_prediction") then
-    local repr = key:repr()
     if repr == "BackSpace" or repr == "Escape" then
       context:clear()
       return 1
