@@ -4,16 +4,17 @@
 
 ## 当前状态
 
-当前正式版本：`v1.0.0`（通用联想 + 个人学习）。普通候选和联想候选默认统一为简体，按 `Control + Shift + T` 可主动切换为繁体；只有万能五笔自身完成的上屏才有资格触发联想，粘贴和外部文本变化不会触发。
+当前正式版本：`v1.0.1`（一体化安装包 + 通用联想 + 个人学习）。普通候选和联想候选默认统一为简体，按 `Control + Shift + T` 可主动切换为繁体；只有万能五笔自身完成的上屏才有资格触发联想，粘贴和外部文本变化不会触发。
 
-v1.0.0 安装：
+## 普通用户安装
 
-```bash
-make prediction-alpha
-make install-universal-learning
-```
+从 GitHub Releases 下载 `WanNengWubi-v1.0.1.pkg`，双击后按系统安装向导操作。安装包内含鼠须管和所需词库，不需要提前安装依赖，也不需要打开终端。
 
-安装后，通用数据库立即提供下一词候选；个人数据继续保存在 `~/Library/Rime/personal_predict.userdb`，用于逐渐调整候选优先级，不会进入 Git。需要清空时执行 `make reset-personal-learning`，原数据会先移动到可恢复备份目录。
+由于当前发布包没有 Apple Developer Installer 证书，macOS 首次可能阻止打开。请到“系统设置 → 隐私与安全性”找到安装提示，点击“仍要打开”，再回到安装器继续。
+
+安装器会自动备份已有 Rime 配置并保留个人学习数据库。安装后，通用数据库立即提供下一词候选；个人数据继续保存在 `~/Library/Rime/personal_predict.userdb`，不会上传。详细说明见 [傻瓜安装指南](docs/INSTALL.md)。
+
+开发者仍可使用 `make install-universal-learning` 从源码安装。
 
 - `config/rime/`：当前已经实际使用的输入方案与界面配置。
 - `dictionaries/`：五笔 86 基础词库。词库属于数据，不与程序代码混在一起管理。
