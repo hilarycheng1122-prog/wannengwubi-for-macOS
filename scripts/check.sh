@@ -10,7 +10,7 @@ done < <(find "$PROJECT_ROOT/config" "$PROJECT_ROOT/features" -type f -name '*.y
 plutil -lint "$PROJECT_ROOT/packaging/macos/Info.single-mode.experimental.plist" >/dev/null
 
 rg -q 'schema_id: wubi_pinyin_local' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
-rg -q 'version: "0.5.0-alpha.6"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
+rg -q 'version: "1.0.0"' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q '万能五笔' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'initial_quality: 100' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
 rg -q 'name: zh_trad' "$PROJECT_ROOT/config/rime/wubi_pinyin_local.schema.yaml"
