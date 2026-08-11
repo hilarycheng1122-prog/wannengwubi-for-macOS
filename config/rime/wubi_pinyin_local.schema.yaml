@@ -4,7 +4,7 @@
 schema:
   schema_id: wubi_pinyin_local
   name: "万能五笔·拼音"
-  version: "0.5.0-alpha.5"
+  version: "0.5.0-alpha.6"
   author:
     - 發明人 王永民先生
   description: |
