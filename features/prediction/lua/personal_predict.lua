@@ -35,6 +35,8 @@ local ignored_types = {
 }
 
 local paste_keys = {
+  ["Control+v"] = true,
+  ["Control+V"] = true,
   ["Super+v"] = true,
   ["Super+V"] = true,
   ["Command+v"] = true,
